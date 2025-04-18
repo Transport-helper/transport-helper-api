@@ -14,7 +14,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
     @Bean
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
-                .group("/api/docs")
+                .group("/api-docs")
                 .pathsToMatch("/**")
                 .build();
     }
