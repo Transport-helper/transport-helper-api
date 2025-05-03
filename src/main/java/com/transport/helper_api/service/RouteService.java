@@ -11,11 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 public class RouteService {
-	@Autowired
-    private RouteRepository routeRepository;
+	private final RouteRepository routeRepository;
 
-    @Autowired
-    private LocationRepository locationRepository;
+    private final LocationRepository locationRepository;
+
+    public RouteService(RouteRepository routeRepository, LocationRepository locationRepository) {
+        this.routeRepository = routeRepository;
+        this.locationRepository = locationRepository;
+    }
 
     public Route addRoute(Long startId, Long endId, String transportMode, double cost, double time) {
         Location start = locationRepository.findById(startId)

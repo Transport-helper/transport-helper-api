@@ -17,8 +17,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Routes", description = "Operations related to routes")
 
 public class RouteController {
-	@Autowired
-    private RouteService routeService;
+	private final RouteService routeService;
+
+    public RouteController(RouteService routeService) {
+        this.routeService = routeService;
+    }
 
     @Operation(
             summary = "Add a new route",
