@@ -1,7 +1,7 @@
-package com.transport.helper_api.repository;
+package com.transport.repository;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 
-import com.transport.helper_api.model.Route;
+import com.transport.model.Route;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

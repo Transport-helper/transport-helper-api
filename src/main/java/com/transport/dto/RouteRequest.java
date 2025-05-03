@@ -1,4 +1,4 @@
-package com.transport.helper_api.dto;
+package com.transport.dto;
 import lombok.Data;
 
 @Data

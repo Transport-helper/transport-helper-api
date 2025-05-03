@@ -1,13 +1,13 @@
-package com.transport.helper_api.controller;
+package com.transport.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import com.transport.helper_api.model.Route;
-import com.transport.helper_api.service.RouteService;
+import com.transport.model.Route;
+import com.transport.service.RouteService;
 
-import com.transport.helper_api.dto.RouteRequest;
+import com.transport.dto.RouteRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 

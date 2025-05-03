@@ -14,10 +14,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.transport.helper_api.controller.RouteController;
-import com.transport.helper_api.dto.RouteRequest;
-import com.transport.helper_api.model.Route;
-import com.transport.helper_api.service.RouteService;
+import com.transport.dto.RouteRequest;
+import com.transport.model.Route;
+import com.transport.service.RouteService;
 import org.springframework.http.MediaType;
 
 @WebMvcTest(RouteController.class)
