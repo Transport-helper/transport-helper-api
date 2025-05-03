@@ -1,7 +1,7 @@
-package com.transport.helper_api.service;
+package com.transport.service;
 
-import com.transport.helper_api.model.TestNode;
-import com.transport.helper_api.repository.TestRepo;
+import com.transport.model.TestNode;
+import com.transport.repository.TestRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

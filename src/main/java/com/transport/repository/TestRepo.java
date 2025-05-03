@@ -1,6 +1,6 @@
-package com.transport.helper_api.repository;
+package com.transport.repository;
 
-import com.transport.helper_api.model.TestNode;
+import com.transport.model.TestNode;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Repository;
 

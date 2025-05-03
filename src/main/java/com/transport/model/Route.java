@@ -1,4 +1,4 @@
-package com.transport.helper_api.model;
+package com.transport.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;

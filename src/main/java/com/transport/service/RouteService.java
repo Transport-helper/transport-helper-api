@@ -1,11 +1,11 @@
-package com.transport.helper_api.service;
+package com.transport.service;
 
 import org.springframework.stereotype.Service;
 
-import com.transport.helper_api.model.Location;
-import com.transport.helper_api.model.Route;
-import com.transport.helper_api.repository.LocationRepository;
-import com.transport.helper_api.repository.RouteRepository;
+import com.transport.model.Location;
+import com.transport.model.Route;
+import com.transport.repository.LocationRepository;
+import com.transport.repository.RouteRepository;
 
 @Service
 public class RouteService {

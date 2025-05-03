@@ -1,7 +1,7 @@
-package com.transport.helper_api.controller;
+package com.transport.controller;
 
-import com.transport.helper_api.model.TestNode;
-import com.transport.helper_api.service.TestService;
+import com.transport.model.TestNode;
+import com.transport.service.TestService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
