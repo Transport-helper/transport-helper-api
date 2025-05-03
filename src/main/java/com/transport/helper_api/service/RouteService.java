@@ -7,8 +7,6 @@ import com.transport.helper_api.model.Route;
 import com.transport.helper_api.repository.LocationRepository;
 import com.transport.helper_api.repository.RouteRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 @Service
 public class RouteService {
 	private final RouteRepository routeRepository;
