@@ -3,6 +3,7 @@ package com.transport.utils;
 import com.transport.model.Location;
 import com.transport.repository.LocationRepository;
 import org.apache.commons.text.similarity.LevenshteinDistance;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -12,18 +13,13 @@ import java.util.Map;
 
 @Component
 public class FuzzySearch {
-    private final Node root;
+    private Node root;
+    private final LocationRepository locationRepository;
     private final LevenshteinDistance distanceMetric;
 
     public FuzzySearch(LocationRepository locationRepository) {
-        List<Location> locations = locationRepository.findAll();
-        this.root = new Node(locations.getFirst().getName());
+        this.locationRepository = locationRepository;
         this.distanceMetric = new LevenshteinDistance();
-
-        locations.stream()
-                .skip(1)
-                .map(Location::getName)
-                .forEach(this::add);
     }
 
     private static class Node {
@@ -53,6 +49,13 @@ public class FuzzySearch {
     }
 
     public List<String> search(String query, int maxDistance) {
+        List<Location> locations = locationRepository.findAll();
+        this.root = new Node(locations.getFirst().getName());
+
+        locations.stream()
+                .skip(1)
+                .map(Location::getName)
+                .forEach(this::add);
         List<String> results = new ArrayList<>();
         searchRecursive(root, query, maxDistance, results);
         return results;

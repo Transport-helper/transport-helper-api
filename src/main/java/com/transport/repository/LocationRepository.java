@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface LocationRepository extends Neo4jRepository<Location, Long> {
+public interface LocationRepository extends Neo4jRepository<Location, String> {
     Optional<Location> findByName(String name);
 }

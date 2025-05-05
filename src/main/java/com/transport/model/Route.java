@@ -1,28 +1,30 @@
 package com.transport.model;
 
+import lombok.Builder;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.Relationship;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.UUID;
+
 @Node("Route")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Route {
-	@Id
-    @GeneratedValue
-    private Long id;
-    @Relationship(type = "STARTS_AT", direction = Relationship.Direction.OUTGOING)
-    private Location startLocation;
-    @Relationship(type = "ENDS_AT", direction = Relationship.Direction.OUTGOING)
-    private Location endLocation;
+    @Id
+    private String id = UUID.randomUUID().toString();
     private String modeOfTransport;
     private double estimatedCost;
     private double estimatedTravelTime;
     private Double validity;
+
+    @Transient
+    private List<Location> locations;
 }
