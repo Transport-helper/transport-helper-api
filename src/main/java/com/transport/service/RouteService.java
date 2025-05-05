@@ -1,5 +1,7 @@
 package com.transport.service;
 
+import com.transport.exceptions.GlobalException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.transport.model.Location;
@@ -18,19 +20,19 @@ public class RouteService {
         this.locationRepository = locationRepository;
     }
 
-    public Route addRoute(Long startId, Long endId, String transportMode, double cost, double time) {
+    public Route addRoute(Long startId, Long endId, String transportMode, double cost, double time) throws GlobalException {
         Location start = locationRepository.findById(startId)
-            .orElseThrow(() -> new IllegalArgumentException("Start location not found"));
+            .orElseThrow(() -> new GlobalException("Starting location not found", HttpStatus.BAD_REQUEST));
 
         Location end = locationRepository.findById(endId)
-            .orElseThrow(() -> new IllegalArgumentException("End location not found"));
+            .orElseThrow(() -> new GlobalException("Ending location not found", HttpStatus.BAD_REQUEST));
 
         boolean exists = routeRepository
             .findByStartLocationIdAndEndLocationIdAndModeOfTransport(startId, endId, transportMode)
             .isPresent();
 
         if (exists) {
-            throw new IllegalArgumentException("Route already exists");
+            throw new GlobalException("Route already exists", HttpStatus.CONFLICT);
         }
 
         Route newRoute = new Route();

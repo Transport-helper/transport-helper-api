@@ -1,5 +1,6 @@
 package com.transport.controller;
 
+import com.transport.exceptions.GlobalException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class RouteController {
     )
 
     @PostMapping
-    public ResponseEntity<Route> addRoute(@RequestBody RouteRequest request) {
+    public ResponseEntity<Route> addRoute(@RequestBody RouteRequest request) throws GlobalException {
         Route savedRoute = routeService.addRoute(
             request.getStartLocationId(),
             request.getEndLocationId(),
@@ -38,9 +39,5 @@ public class RouteController {
         );
 
         return new ResponseEntity<>(savedRoute, HttpStatus.CREATED);
-    }
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
     }
 }
