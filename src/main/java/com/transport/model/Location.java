@@ -1,5 +1,6 @@
 package com.transport.model;
 
+import lombok.Builder;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Location {
 	@Id
 	private String id = UUID.randomUUID().toString();

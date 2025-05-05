@@ -1,0 +1,64 @@
+package com.transport.service;
+
+import com.transport.exceptions.GlobalException;
+import com.transport.model.Location;
+import com.transport.model.Route;
+import com.transport.repository.LocationRepository;
+import com.transport.repository.RouteRepository;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class RouteServiceTest {
+
+    @Mock
+    private LocationRepository locationRepository;
+
+    @Mock
+    private RouteRepository routeRepository;
+
+    @InjectMocks
+    private RouteService routeService;
+
+    @Test
+    void addRoute() throws GlobalException {
+        String loc1Id = UUID.randomUUID().toString();
+        String loc2Id = UUID.randomUUID().toString();
+        when(locationRepository.findById(loc1Id)).thenReturn(Optional.of(new Location()));
+        when(locationRepository.findById(loc2Id)).thenReturn(Optional.of(new Location()));
+        Route savedRoute = Route.builder()
+                .id(UUID.randomUUID().toString())
+                .locations(List.of(Location.builder().id(loc1Id).build(), Location.builder().id(loc2Id).build()))
+                .build();
+
+        when(routeRepository.save(any(Route.class))).thenReturn(savedRoute);
+        when(routeRepository.
+                findRouteWithLocationsAndModeOfTransport(loc1Id, loc2Id, "Bus")).
+                thenReturn(Optional.empty());
+
+
+        Route mockRoute = Route.
+                builder().
+                id(loc1Id).
+                locations(List.of(
+                        Location.builder().id(loc1Id).build(),
+                        Location.builder().id(loc2Id).build()
+                )).
+                build();
+
+        Route result = routeService.addRoute(List.of(loc1Id, loc2Id), "Bus", 35, 47);
+        assertNotNull(result);
+        assertEquals(2, result.getLocations().size());
+    }
+}
