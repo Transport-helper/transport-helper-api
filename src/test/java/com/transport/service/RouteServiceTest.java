@@ -47,16 +47,6 @@ class RouteServiceTest {
                 findRouteWithLocationsAndModeOfTransport(loc1Id, loc2Id, "Bus")).
                 thenReturn(Optional.empty());
 
-
-        Route mockRoute = Route.
-                builder().
-                id(loc1Id).
-                locations(List.of(
-                        Location.builder().id(loc1Id).build(),
-                        Location.builder().id(loc2Id).build()
-                )).
-                build();
-
         Route result = routeService.addRoute(List.of(loc1Id, loc2Id), "Bus", 35, 47);
         assertNotNull(result);
         assertEquals(2, result.getLocations().size());
