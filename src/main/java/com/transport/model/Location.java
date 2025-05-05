@@ -8,14 +8,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Node("Location")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Location {
 	@Id
-	@GeneratedValue
-	private Long id;
+	private String id = UUID.randomUUID().toString();
 	private String name;
 	private double longitude;
 	private double latitude;

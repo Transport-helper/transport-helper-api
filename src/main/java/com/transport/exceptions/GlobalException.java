@@ -10,5 +10,4 @@ public class GlobalException extends Throwable {
         super(message);
         this.httpStatus = httpStatus;
     }
-
 }
