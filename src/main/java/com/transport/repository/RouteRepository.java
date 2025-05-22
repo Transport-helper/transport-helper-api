@@ -1,5 +1,4 @@
 package com.transport.repository;
-import com.transport.model.Location;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 
 import com.transport.model.Route;
@@ -8,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Repository
 public interface RouteRepository extends Neo4jRepository<Route, String> {
@@ -26,7 +24,7 @@ public interface RouteRepository extends Neo4jRepository<Route, String> {
 			"CREATE (r)-[:CONNECTS]->(l1), (r)-[:CONNECTS]->(l2)")
 	void createRouteWithLocations(String routeId, String loc1Id, String loc2Id);
 
-	List<Route> findByLocationsId(String locationId);
+	List<Route> findByLocationsId_OrderByValidityDesc(String locationId);
 
 	@Query("""
     MATCH (r:Route)-[:CONNECTS]->(l:Location)
@@ -34,7 +32,7 @@ public interface RouteRepository extends Neo4jRepository<Route, String> {
     WITH r, collect(l.id) AS locIds
     WHERE all(id IN [$loc1Id, $loc2Id] WHERE id IN locIds)
     MATCH (r)-[:CONNECTS]->(loc:Location)
-    RETURN DISTINCT r
+    RETURN DISTINCT r ORDER BY r.validity DESC
 """)
 	List<Route> findRoutesConnectingTwoLocations(String loc1Id, String loc2Id);
 

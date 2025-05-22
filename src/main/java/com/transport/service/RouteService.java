@@ -11,9 +11,7 @@ import com.transport.repository.RouteRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class RouteService {
@@ -49,12 +47,12 @@ public class RouteService {
             throw new GlobalException("Route already exists", HttpStatus.CONFLICT);
         }
 
-        Route newRoute = new Route();
-        newRoute.setModeOfTransport(transportMode);
-        newRoute.setEstimatedCost(cost);
-        newRoute.setEstimatedTravelTime(time);
-        newRoute.setValidity(null);
-        newRoute.setLocations(locations);
+        Route newRoute = Route.builder()
+                .modeOfTransport(transportMode)
+                .estimatedCost(cost)
+                .estimatedTravelTime(time)
+                .validity(0.0)
+                .locations(locations).build();
 
         Route createdRoute = routeRepository.save(newRoute);
         routeRepository.createRouteWithLocations(createdRoute.getId(), locationIds.getFirst(), locationIds.getLast());
@@ -64,7 +62,7 @@ public class RouteService {
 
     public List<Route> getAllRoutesForLocation(String locationId) {
         return routeRepository.
-                findByLocationsId(locationId);
+                findByLocationsId_OrderByValidityDesc(locationId);
     }
 
     public List<Route> getAllRoutesConnectingTwoLocations(String loc1Id, String loc2Id) {
