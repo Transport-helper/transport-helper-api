@@ -13,6 +13,8 @@ import com.transport.dto.RouteRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/routes")
 @Tag(name = "Routes", description = "Operations related to routes")
@@ -28,7 +30,6 @@ public class RouteController {
             summary = "Add a new route",
             description = "Creates a new route between two locations with a specified transport mode and estimated data"
     )
-
     @PostMapping
     public ResponseEntity<Route> addRoute(@RequestBody @Valid RouteRequest request) throws GlobalException {
         Route savedRoute = routeService.addRoute(
@@ -39,5 +40,32 @@ public class RouteController {
         );
 
         return new ResponseEntity<>(savedRoute, HttpStatus.CREATED);
+    }
+
+    @Operation(
+            summary = "Get routes for a location",
+            description = "Get all routes starting/ending at a specific location"
+    )
+    @GetMapping("/{locationId}")
+    public ResponseEntity<List<Route>> getRoutesForLocation(
+            @PathVariable String locationId,
+            @RequestParam(value = "mode", required = false) String mode,
+            @RequestParam(value = "price",required = false) Double price
+    ) {
+        return ResponseEntity.ok(routeService.getAllRoutesForLocation(locationId,price,mode));
+    }
+
+    @Operation(
+            summary = "Get routes between locations",
+            description = "Get all routes between two specific locations"
+    )
+    @GetMapping()
+    public ResponseEntity<List<Route>> getRoutesConnectingTwoLocations(
+            @RequestParam("loc1") String location1,
+            @RequestParam("loc2") String location2,
+            @RequestParam(value = "mode", required = false) String mode,
+            @RequestParam(value = "price",required = false) Double price
+    ) {
+        return ResponseEntity.ok(routeService.getAllRoutesConnectingTwoLocations(location1, location2,price, mode));
     }
 }
