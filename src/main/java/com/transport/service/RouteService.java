@@ -66,4 +66,8 @@ public class RouteService {
         return routeRepository.
                 findByLocationsId(locationId);
     }
+
+    public List<Route> getAllRoutesConnectingTwoLocations(String loc1Id, String loc2Id) {
+        return routeRepository.findRoutesConnectingTwoLocations(loc1Id, loc2Id);
+    }
 }

@@ -75,4 +75,29 @@ class RouteServiceTest {
         assertEquals(routes.getFirst().getLocations().getFirst().getId(), loc1Id);
         assertEquals(routes.getLast().getLocations().getLast().getId(), loc2Id);
     }
+
+    @Test
+    void getAllRoutesConnectingTwoLocations() throws GlobalException {
+        String loc1Id = UUID.randomUUID().toString();
+        String loc2Id = UUID.randomUUID().toString();
+        when(locationRepository.findById(loc1Id)).thenReturn(Optional.of(Location.builder().id(loc1Id).build()));
+        when(locationRepository.findById(loc2Id)).thenReturn(Optional.of(Location.builder().id(loc2Id).build()));
+        Route savedRoute = Route.builder()
+                .id(UUID.randomUUID().toString())
+                .locations(List.of(Location.builder().id(loc1Id).build(), Location.builder().id(loc2Id).build()))
+                .build();
+
+        when(routeRepository.save(any(Route.class))).thenReturn(savedRoute);
+
+        routeService.addRoute(List.of(loc1Id, loc2Id), "Bus", 35, 47);
+        routeService.addRoute(List.of(loc1Id, loc2Id), "Train", 35, 47);
+        routeService.addRoute(List.of(loc1Id, loc2Id), "Taxi", 35, 47);
+
+        when(routeRepository.findRoutesConnectingTwoLocations(loc1Id, loc2Id))
+                .thenReturn(List.of(savedRoute, savedRoute, savedRoute));
+
+        List<Route> routes = routeService.getAllRoutesConnectingTwoLocations(loc1Id,loc2Id);
+        assertNotNull(routes);
+        assertEquals(3, routes.size());
+    }
 }

@@ -27,4 +27,15 @@ public interface RouteRepository extends Neo4jRepository<Route, String> {
 	void createRouteWithLocations(String routeId, String loc1Id, String loc2Id);
 
 	List<Route> findByLocationsId(String locationId);
+
+	@Query("""
+    MATCH (r:Route)-[:CONNECTS]->(l:Location)
+    WHERE l.id IN [$loc1Id, $loc2Id]
+    WITH r, collect(l.id) AS locIds
+    WHERE all(id IN [$loc1Id, $loc2Id] WHERE id IN locIds)
+    MATCH (r)-[:CONNECTS]->(loc:Location)
+    RETURN DISTINCT r
+""")
+	List<Route> findRoutesConnectingTwoLocations(String loc1Id, String loc2Id);
+
 }

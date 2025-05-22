@@ -2,6 +2,7 @@ package com.transport.controller;
 
 import com.transport.exceptions.GlobalException;
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +45,12 @@ public class RouteController {
     }
 
     @GetMapping("/{locationId}")
-    public ResponseEntity<List<Route>> getRoutes(@PathVariable String locationId) {
+    public ResponseEntity<List<Route>> getRoutesForLocation(@PathVariable String locationId) {
         return ResponseEntity.ok(routeService.getAllRoutesForLocation(locationId));
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<Route>> getRoutesConnectingTwoLocations(@PathParam("loc1") String location1, @PathParam("loc2") String location2) {
+        return ResponseEntity.ok(routeService.getAllRoutesConnectingTwoLocations(location1, location2));
     }
 }
