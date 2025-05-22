@@ -64,7 +64,7 @@ class RouteServiceTest {
                 .build();
 
         when(routeRepository.save(any(Route.class))).thenReturn(savedRoute);
-        when(routeRepository.findByLocationsIdOrderByValidityDesc(loc1Id))
+        when(routeRepository.findByLocationsIdAndModeOfTransportAndEstimatedCostBetweenOrderByValidityDesc(loc1Id, "", 0.0,0.0))
                 .thenReturn(List.of(savedRoute));
 
         routeService.addRoute(List.of(loc1Id, loc2Id), "Bus", 35, 47);
