@@ -31,7 +31,6 @@ public class RouteController {
             summary = "Add a new route",
             description = "Creates a new route between two locations with a specified transport mode and estimated data"
     )
-
     @PostMapping
     public ResponseEntity<Route> addRoute(@RequestBody @Valid RouteRequest request) throws GlobalException {
         Route savedRoute = routeService.addRoute(
@@ -44,11 +43,19 @@ public class RouteController {
         return new ResponseEntity<>(savedRoute, HttpStatus.CREATED);
     }
 
+    @Operation(
+            summary = "Get routes for a location",
+            description = "Get all routes starting/ending at a specific location"
+    )
     @GetMapping("/{locationId}")
     public ResponseEntity<List<Route>> getRoutesForLocation(@PathVariable String locationId) {
         return ResponseEntity.ok(routeService.getAllRoutesForLocation(locationId));
     }
 
+    @Operation(
+            summary = "Get routes between locations",
+            description = "Get all routes between two specific locations"
+    )
     @GetMapping()
     public ResponseEntity<List<Route>> getRoutesConnectingTwoLocations(@PathParam("loc1") String location1, @PathParam("loc2") String location2) {
         return ResponseEntity.ok(routeService.getAllRoutesConnectingTwoLocations(location1, location2));
