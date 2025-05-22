@@ -25,5 +25,6 @@ public interface RouteRepository extends Neo4jRepository<Route, String> {
 			"WHERE r.id = $routeId AND l1.id = $loc1Id AND l2.id = $loc2Id " +
 			"CREATE (r)-[:CONNECTS]->(l1), (r)-[:CONNECTS]->(l2)")
 	void createRouteWithLocations(String routeId, String loc1Id, String loc2Id);
-	
+
+	List<Route> findByLocationsId(String locationId);
 }

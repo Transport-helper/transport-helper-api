@@ -13,6 +13,8 @@ import com.transport.dto.RouteRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/routes")
 @Tag(name = "Routes", description = "Operations related to routes")
@@ -39,5 +41,10 @@ public class RouteController {
         );
 
         return new ResponseEntity<>(savedRoute, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{locationId}")
+    public ResponseEntity<List<Route>> getRoutes(@PathVariable String locationId) {
+        return ResponseEntity.ok(routeService.getAllRoutesForLocation(locationId));
     }
 }

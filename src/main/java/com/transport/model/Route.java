@@ -8,6 +8,7 @@ import org.springframework.data.neo4j.core.schema.Node;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,6 +26,6 @@ public class Route {
     private double estimatedTravelTime;
     private Double validity;
 
-    @Transient
+    @Relationship(type = "CONNECTS", direction = Relationship.Direction.OUTGOING)
     private List<Location> locations;
 }

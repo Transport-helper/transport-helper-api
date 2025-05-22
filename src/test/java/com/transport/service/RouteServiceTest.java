@@ -51,4 +51,28 @@ class RouteServiceTest {
         assertNotNull(result);
         assertEquals(2, result.getLocations().size());
     }
+
+    @Test
+    void getAllRoutesForLocation() throws GlobalException {
+        String loc1Id = UUID.randomUUID().toString();
+        String loc2Id = UUID.randomUUID().toString();
+        when(locationRepository.findById(loc1Id)).thenReturn(Optional.of(Location.builder().id(loc1Id).build()));
+        when(locationRepository.findById(loc2Id)).thenReturn(Optional.of(Location.builder().id(loc2Id).build()));
+        Route savedRoute = Route.builder()
+                .id(UUID.randomUUID().toString())
+                .locations(List.of(Location.builder().id(loc1Id).build(), Location.builder().id(loc2Id).build()))
+                .build();
+
+        when(routeRepository.save(any(Route.class))).thenReturn(savedRoute);
+        when(routeRepository.findByLocationsId(loc1Id))
+                .thenReturn(List.of(savedRoute));
+
+        routeService.addRoute(List.of(loc1Id, loc2Id), "Bus", 35, 47);
+
+        List<Route> routes = routeService.getAllRoutesForLocation(loc1Id);
+        assertNotNull(routes);
+        assertEquals(1, routes.size());
+        assertEquals(routes.getFirst().getLocations().getFirst().getId(), loc1Id);
+        assertEquals(routes.getLast().getLocations().getLast().getId(), loc2Id);
+    }
 }

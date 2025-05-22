@@ -17,7 +17,7 @@ import java.util.Set;
 
 @Service
 public class RouteService {
-	private final RouteRepository routeRepository;
+    private final RouteRepository routeRepository;
 
     private final LocationRepository locationRepository;
 
@@ -33,12 +33,17 @@ public class RouteService {
         }
 
         List<Location> locations = new ArrayList<>();
-        locations.add(locationRepository.findById(locationIds.getFirst()).orElseThrow(() -> new GlobalException("Location not found", HttpStatus.NOT_FOUND)));
-        locations.add(locationRepository.findById(locationIds.getLast()).orElseThrow(() -> new GlobalException("Location not found", HttpStatus.NOT_FOUND)));
+        locations.add(locationRepository.
+                findById(locationIds.getFirst()).
+                orElseThrow(() -> new GlobalException("Location not found", HttpStatus.NOT_FOUND)));
+        locations.
+                add(locationRepository.findById(locationIds.getLast()).
+                        orElseThrow(() -> new GlobalException("Location not found", HttpStatus.NOT_FOUND)));
 
-        boolean exists = routeRepository
-            .findRouteWithLocationsAndModeOfTransport(locationIds.getFirst(),locationIds.getLast(), transportMode)
-            .isPresent();
+        boolean exists = routeRepository.
+                findRouteWithLocationsAndModeOfTransport(
+                        locationIds.getFirst(), locationIds.getLast(), transportMode
+                ).isPresent();
 
         if (exists) {
             throw new GlobalException("Route already exists", HttpStatus.CONFLICT);
@@ -55,5 +60,10 @@ public class RouteService {
         routeRepository.createRouteWithLocations(createdRoute.getId(), locationIds.getFirst(), locationIds.getLast());
 
         return createdRoute;
+    }
+
+    public List<Route> getAllRoutesForLocation(String locationId) {
+        return routeRepository.
+                findByLocationsId(locationId);
     }
 }
