@@ -2,7 +2,6 @@ package com.transport.controller;
 
 import com.transport.exceptions.GlobalException;
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -48,8 +47,12 @@ public class RouteController {
             description = "Get all routes starting/ending at a specific location"
     )
     @GetMapping("/{locationId}")
-    public ResponseEntity<List<Route>> getRoutesForLocation(@PathVariable String locationId) {
-        return ResponseEntity.ok(routeService.getAllRoutesForLocation(locationId));
+    public ResponseEntity<List<Route>> getRoutesForLocation(
+            @PathVariable String locationId,
+            @RequestParam(value = "mode", required = false) String mode,
+            @RequestParam(value = "price",required = false) Double price
+    ) {
+        return ResponseEntity.ok(routeService.getAllRoutesForLocation(locationId,price,mode));
     }
 
     @Operation(
@@ -57,7 +60,12 @@ public class RouteController {
             description = "Get all routes between two specific locations"
     )
     @GetMapping()
-    public ResponseEntity<List<Route>> getRoutesConnectingTwoLocations(@PathParam("loc1") String location1, @PathParam("loc2") String location2) {
-        return ResponseEntity.ok(routeService.getAllRoutesConnectingTwoLocations(location1, location2));
+    public ResponseEntity<List<Route>> getRoutesConnectingTwoLocations(
+            @RequestParam("loc1") String location1,
+            @RequestParam("loc2") String location2,
+            @RequestParam(value = "mode", required = false) String mode,
+            @RequestParam(value = "price",required = false) Double price
+    ) {
+        return ResponseEntity.ok(routeService.getAllRoutesConnectingTwoLocations(location1, location2,price, mode));
     }
 }

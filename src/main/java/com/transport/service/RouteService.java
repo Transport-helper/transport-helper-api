@@ -60,12 +60,19 @@ public class RouteService {
         return createdRoute;
     }
 
-    public List<Route> getAllRoutesForLocation(String locationId) {
-        return routeRepository.
-                findByLocationsId_OrderByValidityDesc(locationId);
+    public List<Route> getAllRoutesForLocation(String locationId, Double price, String mode) {
+        if (mode == null && price == null){
+            return routeRepository.findByLocationsIdOrderByValidityDesc(locationId);
+        } else if (mode == null) {
+            return routeRepository.findByLocationsIdAndEstimatedCostBetweenOrderByValidityDesc(locationId,0.0, price);
+        } else if (price == null) {
+            return routeRepository.findByLocationsIdAndModeOfTransportOrderByValidityDesc(locationId, mode);
+        } else {
+            return routeRepository.findByLocationsIdAndModeOfTransportAndEstimatedCostBetweenOrderByValidityDesc(locationId, mode, 0.0, price);
+        }
     }
 
-    public List<Route> getAllRoutesConnectingTwoLocations(String loc1Id, String loc2Id) {
-        return routeRepository.findRoutesConnectingTwoLocations(loc1Id, loc2Id);
+    public List<Route> getAllRoutesConnectingTwoLocations(String loc1Id, String loc2Id, Double price, String mode) {
+        return routeRepository.findRoutesConnectingTwoLocations(loc1Id, loc2Id, price, mode);
     }
 }

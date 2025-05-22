@@ -64,12 +64,12 @@ class RouteServiceTest {
                 .build();
 
         when(routeRepository.save(any(Route.class))).thenReturn(savedRoute);
-        when(routeRepository.findByLocationsId_OrderByValidityDesc(loc1Id))
+        when(routeRepository.findRoutesForLocationWithFilters(loc1Id,0.0,""))
                 .thenReturn(List.of(savedRoute));
 
         routeService.addRoute(List.of(loc1Id, loc2Id), "Bus", 35, 47);
 
-        List<Route> routes = routeService.getAllRoutesForLocation(loc1Id);
+        List<Route> routes = routeService.getAllRoutesForLocation(loc1Id,0.0,"");
         assertNotNull(routes);
         assertEquals(1, routes.size());
         assertEquals(routes.getFirst().getLocations().getFirst().getId(), loc1Id);
@@ -93,10 +93,10 @@ class RouteServiceTest {
         routeService.addRoute(List.of(loc1Id, loc2Id), "Train", 35, 47);
         routeService.addRoute(List.of(loc1Id, loc2Id), "Taxi", 35, 47);
 
-        when(routeRepository.findRoutesConnectingTwoLocations(loc1Id, loc2Id))
+        when(routeRepository.findRoutesConnectingTwoLocations(loc1Id, loc2Id,0.0,""))
                 .thenReturn(List.of(savedRoute, savedRoute, savedRoute));
 
-        List<Route> routes = routeService.getAllRoutesConnectingTwoLocations(loc1Id,loc2Id);
+        List<Route> routes = routeService.getAllRoutesConnectingTwoLocations(loc1Id,loc2Id,0.0,"");
         assertNotNull(routes);
         assertEquals(3, routes.size());
     }

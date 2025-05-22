@@ -24,16 +24,22 @@ public interface RouteRepository extends Neo4jRepository<Route, String> {
 			"CREATE (r)-[:CONNECTS]->(l1), (r)-[:CONNECTS]->(l2)")
 	void createRouteWithLocations(String routeId, String loc1Id, String loc2Id);
 
-	List<Route> findByLocationsId_OrderByValidityDesc(String locationId);
+	List<Route> findByLocationsIdAndModeOfTransportAndEstimatedCostBetweenOrderByValidityDesc(String locationId, String mode, Double startingCost, Double endingCost);
+
+	List<Route> findByLocationsIdAndModeOfTransportOrderByValidityDesc(String locationId, String modeOfTransport);
+
+	List<Route> findByLocationsIdAndEstimatedCostBetweenOrderByValidityDesc(String locationId, Double startingCost, Double endingCost);
+
+	List<Route> findByLocationsIdOrderByValidityDesc(String locationId);
 
 	@Query("""
     MATCH (r:Route)-[:CONNECTS]->(l:Location)
     WHERE l.id IN [$loc1Id, $loc2Id]
     WITH r, collect(l.id) AS locIds
     WHERE all(id IN [$loc1Id, $loc2Id] WHERE id IN locIds)
-    MATCH (r)-[:CONNECTS]->(loc:Location)
+	AND ($price IS NULL OR r.estimatedCost <= $price)
+	AND ($mode IS NULL OR r.modeOfTransport = $mode)
     RETURN DISTINCT r ORDER BY r.validity DESC
 """)
-	List<Route> findRoutesConnectingTwoLocations(String loc1Id, String loc2Id);
-
+	List<Route> findRoutesConnectingTwoLocations(String loc1Id, String loc2Id, Double price, String mode);
 }
