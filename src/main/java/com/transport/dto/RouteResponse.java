@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RouteResponse {
-    private String id;
+    private String routeId;
     private List<Location> locations;
     private String modeOfTransport;
     private double estimatedCost;

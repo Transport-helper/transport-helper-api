@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,7 +33,6 @@ public class RouteService {
         } else if(locationIds.size() > 2) {
             throw new GlobalException("Only 2 locations allowed", HttpStatus.BAD_REQUEST);
         }
-
 
         locationRepository
                 .findById(locationIds.getFirst())
@@ -58,4 +58,3 @@ public class RouteService {
         return routeRepository.searchRoutesBetweenLocations(loc1Id, loc2Id, price, mode);
     }
 }
-
