@@ -43,10 +43,17 @@ public interface RouteRepository extends Neo4jRepository<RouteRelationship, Long
     List<RouteResponse> searchRoutes(String locId, Double estimatedCost, String modeOfTransport);
 
     @Query("""
-            match (l1:Location {id: loc1Id}) -[r:CONNECTED_TO*]- (l2:Location {id: loc2Id})
-            where r.estimatedCost >= coalesce($estimatedCost, 0.0)
-            and (r.modeOfTransport = coalesce($modeOfTransport, r.modeOfTransport))
-            return r {.*, locations: [l1,l2]} as route
+            MATCH p = (l1:Location {id: $loc1Id}) -[r:CONNECTED_TO*]- (l2:Location {id: $loc2Id})
+            WHERE ALL(rel IN relationships(p) WHERE ($estimatedCost IS NULL OR rel.estimatedCost >= $estimatedCost))
+              AND ALL(rel IN relationships(p) WHERE ($modeOfTransport IS NULL OR rel.modeOfTransport = $modeOfTransport))
+            UNWIND relationships(p) AS singleRel // Unwind each relationship from the path
+            WITH singleRel, startNode(singleRel) AS fromLoc, endNode(singleRel) AS toLoc
+            RETURN singleRel.id AS routeId,
+                   [fromLoc, toLoc] AS locations,
+                   singleRel.modeOfTransport AS modeOfTransport,
+                   singleRel.estimatedCost AS estimatedCost,
+                   singleRel.estimatedTravelTime AS estimatedTravelTime,
+                   singleRel.validity AS validity
             """)
     List<RouteResponse> searchRoutesBetweenLocations(String loc1Id, String loc2Id, Double estimatedCost, String modeOfTransport);
 }

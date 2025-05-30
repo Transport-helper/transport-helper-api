@@ -68,31 +68,4 @@ public class RouteController {
     ) {
         return ResponseEntity.ok(routeService.getAllRoutesConnectingTwoLocations(location1, location2,price, mode));
     }
-
-    @Operation(
-            summary = "Get routes for a location",
-            description = "Get all routes starting/ending at a specific location"
-    )
-    @GetMapping("/{locationId}")
-    public ResponseEntity<List<Route>> getRoutesForLocation(
-            @PathVariable String locationId,
-            @RequestParam(value = "mode", required = false) String mode,
-            @RequestParam(value = "price",required = false) Double price
-    ) {
-        return ResponseEntity.ok(routeService.getAllRoutesForLocation(locationId,price,mode));
-    }
-
-    @Operation(
-            summary = "Get routes between locations",
-            description = "Get all routes between two specific locations"
-    )
-    @GetMapping()
-    public ResponseEntity<List<Route>> getRoutesConnectingTwoLocations(
-            @RequestParam("loc1") String location1,
-            @RequestParam("loc2") String location2,
-            @RequestParam(value = "mode", required = false) String mode,
-            @RequestParam(value = "price",required = false) Double price
-    ) {
-        return ResponseEntity.ok(routeService.getAllRoutesConnectingTwoLocations(location1, location2,price, mode));
-    }
 }

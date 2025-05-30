@@ -1,6 +1,7 @@
 services:
   neo4j:
     image: neo4j:latest
+#   You can uncomment this section to persist the NEO4J data in your desired directory in the file system by changing the directories below.
 #    volumes:
 #      - /$HOME/neo4j/logs:/logs
 #      - /$HOME/neo4j/config:/config
