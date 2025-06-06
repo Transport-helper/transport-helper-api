@@ -3,7 +3,7 @@ package com.transport.service;
 import com.transport.exceptions.GlobalException;
 import com.transport.model.Location;
 import com.transport.repository.LocationRepository;
-import com.transport.utils.FuzzySearch;
+import com.transport.utils.TrieSearch;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +12,11 @@ import java.util.List;
 @Service
 public class LocationService {
     private final LocationRepository locationRepository;
-    private final FuzzySearch fuzzySearch;
+    private final TrieSearch trieSearch;
 
-    public LocationService(LocationRepository locationRepository, FuzzySearch fuzzySearch) {
+    public LocationService(LocationRepository locationRepository, TrieSearch trieSearch) {
         this.locationRepository = locationRepository;
-        this.fuzzySearch = fuzzySearch;
+        this.trieSearch = trieSearch;
     }
 
     public List<Location> getAllLocations() {
@@ -30,6 +30,6 @@ public class LocationService {
     }
 
     public List<String> searchForLocation(String name) {
-        return fuzzySearch.search(name,name.length()/2);
+        return trieSearch.search(name);
     }
 }

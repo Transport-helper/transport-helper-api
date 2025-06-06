@@ -1,13 +1,9 @@
 package com.transport.service;
 
-import com.transport.config.DataSeeder;
 import com.transport.exceptions.GlobalException;
 import com.transport.model.Location;
 import com.transport.repository.LocationRepository;
-import com.transport.utils.FuzzySearch;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import com.transport.utils.TrieSearch;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +24,7 @@ class LocationServiceTest {
     LocationRepository locationRepository;
 
     @Mock
-    FuzzySearch fuzzySearch;
+    TrieSearch trieSearch;
 
     @InjectMocks
     LocationService locationService;
@@ -60,17 +55,17 @@ class LocationServiceTest {
 
     @Test
     void searchForLocation() {
-        when(fuzzySearch.search("بنهي", 2)).thenReturn(List.of("بنها"));
-        when(fuzzySearch.search("نبها", 2)).thenReturn(List.of("بنها"));
+        when(trieSearch.search("بنهي", 2)).thenReturn(List.of("بنها"));
+        when(trieSearch.search("نبها", 2)).thenReturn(List.of("بنها"));
 
         List<String> locations = locationService.searchForLocation("بنهي");
         assertNotNull(locations);
         assertEquals(List.of("بنها"), locations);
-        verify(fuzzySearch, times(1)).search("بنهي", 2);
+        verify(trieSearch, times(1)).search("بنهي", 2);
 
         locations = locationService.searchForLocation("نبها");
         assertNotNull(locations);
         assertEquals(List.of("بنها"), locations);
-        verify(fuzzySearch, times(1)).search("نبها", 2);
+        verify(trieSearch, times(1)).search("نبها", 2);
     }
 }
