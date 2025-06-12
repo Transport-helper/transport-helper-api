@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import com.transport.model.Route;
+import com.transport.dto.RouteResponse;
 import com.transport.service.RouteService;
 
 import com.transport.dto.RouteRequest;
@@ -31,15 +31,15 @@ public class RouteController {
             description = "Creates a new route between two locations with a specified transport mode and estimated data"
     )
     @PostMapping
-    public ResponseEntity<Route> addRoute(@RequestBody @Valid RouteRequest request) throws GlobalException {
-        Route savedRoute = routeService.addRoute(
+    public ResponseEntity<RouteResponse> addRoute(@RequestBody @Valid RouteRequest request) throws GlobalException {
+        RouteResponse route = routeService.addRoute(
             request.getLocationIds(),
             request.getModeOfTransport(),
             request.getEstimatedCost(),
             request.getEstimatedTravelTime()
         );
 
-        return new ResponseEntity<>(savedRoute, HttpStatus.CREATED);
+        return new ResponseEntity<>(route, HttpStatus.CREATED);
     }
 
     @Operation(
@@ -47,7 +47,7 @@ public class RouteController {
             description = "Get all routes starting/ending at a specific location"
     )
     @GetMapping("/{locationId}")
-    public ResponseEntity<List<Route>> getRoutesForLocation(
+    public ResponseEntity<List<RouteResponse>> getRoutesForLocation(
             @PathVariable String locationId,
             @RequestParam(value = "mode", required = false) String mode,
             @RequestParam(value = "price",required = false) Double price
@@ -60,7 +60,7 @@ public class RouteController {
             description = "Get all routes between two specific locations"
     )
     @GetMapping()
-    public ResponseEntity<List<Route>> getRoutesConnectingTwoLocations(
+    public ResponseEntity<List<RouteResponse>> getRoutesConnectingTwoLocations(
             @RequestParam("loc1") String location1,
             @RequestParam("loc2") String location2,
             @RequestParam(value = "mode", required = false) String mode,
