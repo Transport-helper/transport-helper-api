@@ -2,7 +2,7 @@ package com.transport.utils;
 
 import com.transport.model.Location;
 import com.transport.repository.LocationRepository;
-import org.apache.commons.text.similarity.LevenshteinDistance;
+import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -14,7 +14,6 @@ public class TrieSearch {
 
     public TrieSearch(LocationRepository locationRepository) {
         this.locationRepository = locationRepository;
-        initializeTrie();
     }
 
     private static class Node {
@@ -23,6 +22,7 @@ public class TrieSearch {
         boolean isEnd = false;
     }
 
+    @PostConstruct
     private void initializeTrie() {
         List<Location> locations = locationRepository.findAll();
         for (Location location : locations) {
